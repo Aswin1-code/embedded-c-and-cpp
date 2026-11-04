@@ -1,144 +1,93 @@
-#include <iostream>
-#include <string>
-#include <complex>
+
+#include<iostream>
 using namespace std;
 
-// Class Template
-template <class T>
+#define N 2
+
+template<class T>
 class Matrix
 {
-    T a[2][2];
-
+    T M[N][N];
 public:
-
-    Matrix(T x = T(), T y = T(),
-           T z = T(), T w = T())
+    Matrix()
     {
-        a[0][0] = x;
-        a[0][1] = y;
-        a[1][0] = z;
-        a[1][1] = w;
+        for(int i=0;i<N;i++)
+            for(int j=0;j<N;j++)
+                M[i][j] = 0;
     }
-
-    // Display matrix
-    void display()
+    void init()
     {
-        for(int i = 0; i < 2; i++)
-        {
-            for(int j = 0; j < 2; j++)
-                cout << a[i][j] << " ";
-
-            cout << endl;
+        for(int i=0;i<N;i++)
+            for(int j=0;j<N;j++)
+                cin>>M[i][j];
+    }
+    Matrix<T> operator+(const Matrix<T>& B)
+    {
+        Matrix<T> temp;
+        for(int i=0;i<N;i++)
+            for(int j=0;j<N;j++)
+                temp.M[i][j] = M[i][j] + B.M[i][j];
+        return temp;
+    }
+    Matrix<T> operator*(const T& c)
+    {
+        Matrix<T> temp;
+        for(int i=0;i<N;i++)
+            for(int j=0;j<N;j++)
+                temp.M[i][j] = M[i][j]*c;
+        return temp;
+    }
+    friend ostream& operator<<(ostream& out,Matrix<T>& A)
+    {
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                cout<<" "<<A.M[i][j]<<" ";
+            }
+            cout<<endl;
         }
-    }
 
-    // Addition of matrices
-    Matrix add(Matrix b)
-    {
-        return Matrix(
-            a[0][0] + b.a[0][0],
-            a[0][1] + b.a[0][1],
-            a[1][0] + b.a[1][0],
-            a[1][1] + b.a[1][1]
-        );
-    }
-
-    // Scalar multiplication
-    Matrix multiplyScalar(T s)
-    {
-        return Matrix(
-            a[0][0] * s,
-            a[0][1] * s,
-            a[1][0] * s,
-            a[1][1] * s
-        );
+        return out;
     }
 };
 
-// Function Template
-template <class T>
-T maxElement(T arr[], int n)
+template<class T>
+T maxElement(const T* A,int l)
 {
-    T max = arr[0];
-
-    for(int i = 1; i < n; i++)
-    {
-        if(arr[i] > max)
-            max = arr[i];
-    }
-
-    return max;
+    T temp = A[0];
+    for(int i=0;i<l;i++)
+        if(temp < A[i])
+            temp = A[i];
+    return temp;
+}
+template<>
+string maxElement<string>(const string* A,int l)
+{
+    string temp = A[0];
+    for(int i=0;i<l;i++)
+        if(temp.length() < A[i].length())
+            temp = A[i];
+    return temp;
 }
 
-// Function Template Specialization for strings
-template <>
-string maxElement<string>(string arr[], int n)
-{
-    string longest = arr[0];
-
-    for(int i = 1; i < n; i++)
-    {
-        if(arr[i].length() > longest.length())
-            longest = arr[i];
-    }
-
-    return longest;
-}
-
-// Main function
 int main()
 {
-    // Integer Matrix
-    Matrix<int> m1(1, 2, 3, 4);
+    Matrix<int> A,R1;
+    cout<<"A matrix(int)\n";
+    A.init();
+    R1 = A * 2;
+    cout<<"A*2:\n"<<R1;
+    Matrix<double> B,C,R2;
+    cout<<"B matrix(double)\n";
+    B.init();
+    cout<<"C matrix(double)\n";
+    C.init();
+    R2 = B+C;
+    cout<<"B+C:\n"<<R2;
 
-    cout << "Integer Matrix:\n";
-    m1.display();
+    int intArr[6] = {1,4,6,5,2,3};
+    string strArr[6] = {"audi","bmw","lamborghini","ferrari","maserati","rollsroyce"};
 
-    // Double Matrix
-    Matrix<double> m2(1.5, 2.5, 3.5, 4.5);
-
-    cout << "\nDouble Matrix:\n";
-    m2.display();
-
-    // Matrix Addition
-    Matrix<int> m3 = m1.add(m1);
-
-    cout << "\nMatrix Addition:\n";
-    m3.display();
-
-    // Scalar Multiplication
-    Matrix<double> m4 = m2.multiplyScalar(2.0);
-
-    cout << "\nScalar Multiplication:\n";
-    m4.display();
-
-    // Integer Array
-    int arr[] = {10, 30, 20, 50, 40};
-
-    cout << "\nLargest Integer: "
-         << maxElement(arr, 5);
-
-    // String Array
-    string words[] = {"Apple", "Banana",
-                      "Watermelon", "Mango"};
-
-    cout << "\nLongest String: "
-         << maxElement(words, 4);
-
-    // Complex Number Matrix
-    Matrix<complex<double>> cm(
-        {1, 2}, {2, 3},
-        {3, 4}, {4, 5}
-    );
-
-    cout << "\n\nComplex Number Matrix:\n";
-    cm.display();
-
-    // Complex Matrix Addition
-    Matrix<complex<double>> cm2 = cm.add(cm);
-
-    cout << "\nComplex Matrix Addition:\n";
-    cm2.display();
-
+    cout<<"Max int in int array:            "<<maxElement(intArr,6)<<endl;
+    cout<<"longest string in string array:  "<<maxElement(strArr,6)<<endl;
     return 0;
 }
