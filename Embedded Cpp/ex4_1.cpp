@@ -1,93 +1,106 @@
-
-#include<iostream>
+#include <iostream>
+#include <string>
 using namespace std;
 
-#define N 2
+const int N = 2;
 
+// Class Template
 template<class T>
 class Matrix
 {
     T M[N][N];
+
 public:
     Matrix()
     {
-        for(int i=0;i<N;i++)
-            for(int j=0;j<N;j++)
-                M[i][j] = 0;
+        for(int i=0; i<N; i++)
+            for(int j=0; j<N; j++)
+                M[i][j] = T{};
     }
+
     void init()
     {
-        for(int i=0;i<N;i++)
-            for(int j=0;j<N;j++)
-                cin>>M[i][j];
+        for(int i=0; i<N; i++)
+            for(int j=0; j<N; j++)
+                cin >> M[i][j];
     }
-    Matrix<T> operator+(const Matrix<T>& B)
+
+    Matrix<T> operator+(const Matrix<T>& B) const
     {
         Matrix<T> temp;
-        for(int i=0;i<N;i++)
-            for(int j=0;j<N;j++)
+        for(int i=0; i<N; i++)
+            for(int j=0; j<N; j++)
                 temp.M[i][j] = M[i][j] + B.M[i][j];
         return temp;
     }
-    Matrix<T> operator*(const T& c)
+
+    Matrix<T> operator*(const T& c) const
     {
         Matrix<T> temp;
-        for(int i=0;i<N;i++)
-            for(int j=0;j<N;j++)
-                temp.M[i][j] = M[i][j]*c;
+        for(int i=0; i<N; i++)
+            for(int j=0; j<N; j++)
+                temp.M[i][j] = M[i][j] * c;
         return temp;
     }
-    friend ostream& operator<<(ostream& out,Matrix<T>& A)
-    {
-        for(int i=0;i<N;i++){
-            for(int j=0;j<N;j++){
-                cout<<" "<<A.M[i][j]<<" ";
-            }
-            cout<<endl;
-        }
 
+    friend ostream& operator<<(ostream& out, const Matrix<T>& A)
+    {
+        for(int i=0; i<N; i++)
+        {
+            for(int j=0; j<N; j++)
+                out << A.M[i][j] << " ";
+            out << endl;
+        }
         return out;
     }
 };
 
+// Function Template
 template<class T>
-T maxElement(const T* A,int l)
+T maxElement(const T* A, int n)
 {
-    T temp = A[0];
-    for(int i=0;i<l;i++)
-        if(temp < A[i])
-            temp = A[i];
-    return temp;
+    T max = A[0];
+    for(int i=1; i<n; i++)
+        if(max < A[i])
+            max = A[i];
+    return max;
 }
+
+// Function Template Specialization
 template<>
-string maxElement<string>(const string* A,int l)
+string maxElement<string>(const string* A, int n)
 {
-    string temp = A[0];
-    for(int i=0;i<l;i++)
-        if(temp.length() < A[i].length())
-            temp = A[i];
-    return temp;
+    string longest = A[0];
+    for(int i=1; i<n; i++)
+        if(longest.length() < A[i].length())
+            longest = A[i];
+    return longest;
 }
 
 int main()
 {
-    Matrix<int> A,R1;
-    cout<<"A matrix(int)\n";
+    Matrix<int> A, R1;
+    cout << "Enter integer matrix:\n";
     A.init();
+
     R1 = A * 2;
-    cout<<"A*2:\n"<<R1;
-    Matrix<double> B,C,R2;
-    cout<<"B matrix(double)\n";
+    cout << "A * 2:\n" << R1;
+
+    Matrix<double> B, C, R2;
+    cout << "Enter first double matrix:\n";
     B.init();
-    cout<<"C matrix(double)\n";
+    cout << "Enter second double matrix:\n";
     C.init();
-    R2 = B+C;
-    cout<<"B+C:\n"<<R2;
 
-    int intArr[6] = {1,4,6,5,2,3};
-    string strArr[6] = {"audi","bmw","lamborghini","ferrari","maserati","rollsroyce"};
+    R2 = B + C;
+    cout << "B + C:\n" << R2;
 
-    cout<<"Max int in int array:            "<<maxElement(intArr,6)<<endl;
-    cout<<"longest string in string array:  "<<maxElement(strArr,6)<<endl;
+    int intArr[] = {1, 4, 6, 5, 2, 3};
+    string strArr[] = {"audi", "bmw", "lamborghini",
+                       "ferrari", "maserati", "rollsroyce"};
+
+    cout << "Maximum integer: " << maxElement(intArr, 6) << endl;
+    cout << "Longest string: " << maxElement(strArr, 6) << endl;
+
     return 0;
 }
