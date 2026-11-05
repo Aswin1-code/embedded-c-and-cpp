@@ -54,7 +54,7 @@ class undergraduate:public result
       void display()
       {
          cout<<"...UG result..."<<endl;
-         cout<<"Name:"<<name<<"     ID:"<<id<<endl;
+         cout<<"Name:"<<name<<" ID:"<<id<<endl;
          cout<<"Final score:"<<final_score<<endl;
       }
 };
