@@ -88,7 +88,36 @@ int main() {
 
     return 0;
 }
+//-===============-===============-===============-===============-===============-===============
+// same code,, but sending the sum as reference from main -- see below.. 
 
+// Notice the '&' before resultSum: it passes the variable by reference
+void calculateArraySum(int arr[], int size, int &resultSum) {
+    resultSum = 0; // Reset or initialize
+
+    for (int i = 0; i < size; i++) {
+        resultSum += arr[i];
+    }
+}
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50};
+    int size = 5;
+    int finalSum = 0; // This variable lives in main()
+
+    // CRITICAL: Because std::thread copies arguments by default,
+    // you MUST wrap the reference variable in std::ref()!
+    thread t1(calculateArraySum, arr, size, ref(finalSum));
+
+    // Wait for thread to finish computing
+    t1.join();
+
+    // Now main() can access the updated finalSum!
+    cout << "Array sum calculated by thread and stored in main: " << finalSum << "\n";
+
+    return 0;
+}
+//-===============-===============-===============-===============-===============-===============
 
 //--------------------------------------------------------------
 
