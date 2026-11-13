@@ -31,24 +31,10 @@ int main()
     cin >> increments;
 
     // 1. Create shared memory
-    shmid = shmget(IPC_PRIVATE, sizeof(int),
-                   IPC_CREAT | 0666);
-
-    if (shmid == -1)
-    {
-        perror("shmget failed");
-        return 1;
-    }
+    shmid = shmget(IPC_PRIVATE, sizeof(int),IPC_CREAT | 0666);
 
     // 2. Attach shared memory
     sharedData = (int *)shmat(shmid, NULL, 0);
-
-    if (sharedData == (int *)-1)
-    {
-        perror("shmat failed");
-        shmctl(shmid, IPC_RMID, NULL);
-        return 1;
-    }
 
     // Initialize shared memory
     *sharedData = 0;
