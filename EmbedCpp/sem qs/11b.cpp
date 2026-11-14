@@ -29,8 +29,8 @@ public:
         Distance temp; // Temporary object to store the result
 
         // Add feet and inches
-        temp.feet = this->feet + d2.feet;
-        temp.inches = this->inches + d2.inches;
+        temp.feet = feet + d2.feet;
+        temp.inches = inches + d2.inches;
 
         // Normalize inches if they exceed 12
         if (temp.inches >= 12) {
